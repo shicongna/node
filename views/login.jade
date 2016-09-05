@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+html(lang="en")
+	head
+		meta(charset="UTF-8")
+		title login
+		link(rel="stylesheet",href="style/bootstrap.min.css")
+		style(type='text/css').
+			.active {
+				color: red;
+				font-family: "微软雅黑";
+				font-size:35;
+			}
+
+			.active1 {
+				color: green;
+				font-family:"微软雅黑";
+				font-size:35;
+			}
+	body
+		form(action="/login" method="post")
+			label(for="") Email address：
+			input.form-control(type="text" name="email" id="txt"  placeholder="Email")
+			p#word
+			label(for="") Password：
+			input.form-control(type="password" name="password" id="pwd" placeholder="Password")
+			p#wordpwd
+			h2 #{info}
+			button.btn.btn-default 提交
+		script(src="script/jquery.js")
+		script(src="script/zhengze.js")
+	

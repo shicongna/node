@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+html(lang="en")
+head
+    meta(charset="UTF-8")
+    title layout
+    style(type='text/css').
+        #users, #students {
+            cursor: pointer;
+        }
+        #grade {
+            border: none;
+            background-color: #fff;
+            width: 100px;
+            height: 40px;
+            background-color: pink;
+            font-family: "微软雅黑";
+            font-size: 18px;
+            margin-left: 850px;
+        }
+        #male, #female {
+            border: none;
+            background-color: #fff;
+            font-family: "微软雅黑";
+            font-size: 18px;
+            width: 40px;
+            height: 40px;
+            background-color: #9955ff;
+            margin-left: 4px;
+        }
+    link(rel="stylesheet",href="style/bootstrap.min.css")
+body
+    button.insertdata.btn.btn-primary 添加
+    table.table
+        thead
+            form(action='studentlist', method='get')
+                th
+                    button &#x5B66;&#x751F;&#x5217;&#x8868;
+            form(action='userlist', method='get')
+                th
+                    button &#x7528;&#x6237;&#x5217;&#x8868;
+            th 当前用户 #{name}
+    table.table.table-bordered.table-hover
+        thead
+            th id
+            | &#x9;&#x9;&#x9;
+            th &#x7F16;&#x53F7;
+            | &#x9;&#x9;&#x9;
+            th &#x59D3;&#x540D;
+            | &#x9;&#x9;&#x9;
+            th &#x5E74;&#x9F84;
+            |           &#x9;
+            th &#x6210;&#x7EE9;
+            | &#x9;&#x9;&#x9;
+            th &#x6027;&#x522B;
+            | &#x9;&#x9;&#x9;
+            th &#x5220;&#x9664;
+            | &#x9;&#x9;&#x9;
+            th &#x4FEE;&#x6539;
+        | &#x9;&#x9;
+        tbody
+            block content
+
+
+
+
+
+
+

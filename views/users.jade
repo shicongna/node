@@ -1,0 +1,106 @@
+link(rel="stylesheet",href="style/bootstrap.min.css")
+block content
+    button.insertdata.btn.btn-primary 添加
+    table.table
+            thead
+                form(action='studentlist', method='get')
+                    th
+                        button &#x5B66;&#x751F;&#x5217;&#x8868;
+                form(action='userlist', method='get')
+                    th
+                        button &#x7528;&#x6237;&#x5217;&#x8868;
+                th 当前用户 #{name}
+    h1 你好，这是用户列表
+    table.table.table-bordered.table-hover
+        thead
+            th id
+                |           &#x9;
+            th &#x7528;&#x6237;
+            | &#x9;&#x9;&#x9;
+            th &#x90AE;&#x7BB1;
+            | &#x9;&#x9;&#x9;
+            th &#x5BC6;&#x7801;
+            th &#x5220;&#x9664;
+            | &#x9;&#x9;&#x9;
+
+        | &#x9;&#x9;
+        tbody
+    #myModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel')
+        .modal-dialog(role='document')
+            .modal-content
+                .modal-header
+                    button.close(type='button', data-dismiss='modal', aria-label='Close')
+                        span(aria-hidden='true') ×
+                    h4.modal-title 添加/修改数据
+                .modal-body
+                    form.myform(method="post")
+                        .form-group
+                            label 用户
+                            input.form-control(type='text',name="username")
+                        .form-group
+                            label 邮箱
+                            input.number.form-control(type='text',name="email")
+                        .form-group
+                            label 密码
+                            input.form-control(type='password',name="password")
+                        button.btn.btn-primary(type='submit') 添加/修改
+    script(src = "script/jquery.js")
+    script(src="script/bootstrap.min.js")
+    script(src="script/index.js")
+    script(type='text/javascript').
+            $.ajax({
+                method: "get",
+                url: "/getuserdata",
+            }).done(function (data) {
+                showdata(data)
+            })
+            $("table tbody").delegate(".del", "click", function () {
+                var email = $(this).attr("data_num");
+                var condition = {"email": email};
+                $.ajax({
+                    method: "post",
+                    url: "/removeuserdata",
+                    data: condition
+                }).done(function (data) {
+                    showdata(data)
+                })
+            });
+            $(".myform").submit(function () {
+                var data = $(this).serialize();
+                $.ajax({
+                    method: "post",
+                    url: "/insertuserdata",
+                    data: data
+                }).done(function (data) {
+                    showdata(data)
+                })
+                return false;
+            })
+            $("table tbody").delegate(".updatedata", "click", function () {
+                $("#myModal").modal();
+                var email = $(this).attr("data_num");
+                $(".number").val(email).attr("readonly", "readonly");
+                var data = $(this).serialize();
+                $.ajax({
+                    method: "post",
+                    url: "/updateuserdata",
+                    data: data
+                }).done(function (data) {
+                    showdata(data)
+                })
+            })
+            function showdata(data) {
+                $("table tbody").empty()
+                for (var i in data) {
+                    var $tr = $("<tr></tr>")
+                    for (var j in data[i]) {
+                        var $td = $("<td></td>")
+                        var text = $td.text(data[i][j])
+                        $tr.append($td)
+                    }
+                    $tr.append("<td><button class='del' data_num='" + data[i].email + "'>删除</button></td>");
+
+                    $("table tbody").append($tr)
+                }
+            }
+//            $tr.append("<td><button class='updatedata' data_number='" + data[i].email + "'>修改</button></td>")

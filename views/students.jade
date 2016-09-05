@@ -1,0 +1,124 @@
+extends layout
+block content
+    h1 你好，这是学生列表
+    input#grade(type='button', value='按成绩排序')
+    //input(type='button', value='性别筛选')
+    | &#x9;
+    input#male(type='button', value='男')
+    | &#x9;
+    input#female(type='button', value='女')
+    #myModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel')
+        .modal-dialog(role='document')
+            .modal-content
+                .modal-header
+                    button.close(type='button', data-dismiss='modal', aria-label='Close')
+                        span(aria-hidden='true') ×
+                    h4.modal-title 添加/修改数据
+                .modal-body
+                    form.myform(method="post")
+                        .form-group
+                            label 编号
+                            input.number.form-control(type='text',name="number")
+                        .form-group
+                            label 姓名
+                            input.form-control(type='text',name="name")
+                        .form-group
+                            label 年龄
+                            input.form-control(type='text',name="age")
+                        .form-group
+                            label 成绩
+                            input.form-control(type='text',name="grade")
+                        .form-group
+                            label 性别
+                            input.form-control(type='text',name="sex")
+                        button.btn.btn-primary(type='submit') 添加/修改
+    script(src = "script/jquery.js")
+    script(src="script/bootstrap.min.js")
+    script(src="script/index.js")
+    script(type='text/javascript').
+        $.ajax({
+            method: "get",
+            url: "/getdata",
+        }).done(function (datas) {
+            showdata(datas)
+        })
+        $("table tbody").delegate(".del", "click", function () {
+            var number = $(this).attr("data_num");
+            var condition = {"number": number};
+            $.ajax({
+                method: "post",
+                url: "/removedata",
+                data: condition
+            }).done(function (data) {
+                showdata(data)
+            })
+        });
+        $(".myform").submit(function () {
+            var data = $(this).serialize();
+            $.ajax({
+                method: "post",
+                url: "/insertdata",
+                data: data
+            }).done(function (data) {
+                showdata(data)
+            })
+            return false;
+
+        })
+        $("table tbody").delegate(".updatedata", "click", function () {
+            $("#myModal").modal();
+            var number = $(this).attr("data_number");
+            var num = $(".number").val(number).attr("readonly", "readonly");
+            var data = $(this).serialize();
+            $.ajax({
+                method: "post",
+                url: "/updatedata",
+                data:data
+            }).done(function (data) {
+                showdata(data)
+            })
+        })
+        $("#grade").click(function () {
+            $.ajax({
+                method: "get",
+                url: "/findgrade",
+            }).done(function (data) {
+               showdata(data)
+            })
+        })
+        $("#male").click(function () {
+            $.ajax({
+                method: "get",
+                url: "/nan"
+            }).done(function (data) {
+                showdata(data);
+            })
+        })
+        $("#female").click(function () {
+            $.ajax({
+                method: "get",
+                url: "/nv"
+            }).done(function (data) {
+                showdata(data);
+            })
+        })
+        function showdata(data) {
+            $("table tbody").empty()
+            for (var i in data) {
+                var $tr = $("<tr></tr>")
+                for (var j in data[i]) {
+                    var $td = $("<td></td>")
+                    var text = $td.text(data[i][j])
+                    $tr.append($td)
+                }
+                $tr.append("<td><button class='del' data_num='" + data[i].number + "'>删除</button></td>");
+                $tr.append("<td><button class='updatedata' data_number='" + data[i].number + "'>修改</button></td>")
+                $("table tbody").append($tr)
+            }
+        }
+
+
+
+
+
+
